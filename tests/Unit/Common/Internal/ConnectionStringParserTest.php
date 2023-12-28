@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal;
 
 use MicrosoftAzure\Storage\Common\Internal\ConnectionStringParser;
+use RuntimeException;
 
 /**
  * Unit tests for class ConnectionStringParser
@@ -58,7 +59,7 @@ class ConnectionStringParserTest extends \PHPUnit\Framework\TestCase
     private function _parseTestFail($value)
     {
         // Setup
-        $this->setExpectedException('\RuntimeException');
+        $this->expectException(RuntimeException::class);
 
         // Test
         ConnectionStringParser::parseConnectionString('connectionString', $value);

@@ -72,7 +72,7 @@ class Range
      */
     public function getStart()
     {
-        return $this->start;
+        return $this->start ?? 0;
     }
 
     /**

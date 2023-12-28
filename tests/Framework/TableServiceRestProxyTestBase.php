@@ -23,6 +23,8 @@
  */
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
+use MicrosoftAzure\Storage\Common\Internal\RestProxy;
+use MicrosoftAzure\Storage\Table\Models\QueryTablesOptions;
 use MicrosoftAzure\Storage\Table\TableRestProxy;
 use MicrosoftAzure\Storage\Tests\Framework\ServiceRestProxyTestBase;
 use MicrosoftAzure\Storage\Common\Middlewares\RetryMiddlewareFactory;
@@ -41,7 +43,7 @@ class TableServiceRestProxyTestBase extends ServiceRestProxyTestBase
 {
     protected $_createdTables;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $tableRestProxy = TableRestProxy::createTableService($this->connectionString);
@@ -74,7 +76,31 @@ class TableServiceRestProxyTestBase extends ServiceRestProxyTestBase
         }
     }
 
-    protected function tearDown()
+    /**
+     * Get an array of all tables in the account
+     * wraps queryTables with logic to handle
+     * continuation token
+     *
+     * @return array
+     */
+    public function getTables(): array
+    {
+        $tables = [];
+        $token = null;
+        do {
+            if ($token) {
+                $options = new QueryTablesOptions();
+                $options->setContinuationToken($token);
+            }
+            $result = $this->restProxy->queryTables($options);
+            $tables = array_merge($tables, $result->getTables());
+            $token = $result->getContinuationToken();
+        } while ($token !== null);
+
+        return $tables;
+    }
+
+    protected function tearDown(): void
     {
         parent::tearDown();
 

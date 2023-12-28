@@ -66,11 +66,12 @@ class Validate
      *
      * @return void
      */
-    public static function canCastAsString($var, $name)
+    public static function canCastAsString($var, $name): void
     {
+        $test = static function (string $input) {};
         try {
-            (string)$var;
-        } catch (\Exception $e) {
+            $test((string)$var);
+        } catch (\Error) {
             throw new InvalidArgumentTypeException(gettype(''), $name);
         }
     }
@@ -137,9 +138,10 @@ class Validate
      */
     public static function isInteger($var, $name)
     {
+        $test = static function(int $value) {};
         try {
-            (int)$var;
-        } catch (\Exception $e) {
+            $test($var);
+        } catch (\Error $e) {
             throw new InvalidArgumentTypeException(gettype(123), $name);
         }
     }

@@ -128,11 +128,12 @@ class JsonSerializerTest extends \PHPUnit\Framework\TestCase
 
     public function testSerializeNull()
     {
+        $this->expectException(InvalidArgumentTypeException::class);
+        $this->expectExceptionMessage(sprintf(Resources::INVALID_PARAM_MSG, 'array', 'array'));
         // Setup
         $jsonSerializer = new JsonSerializer();
         $testData = null;
         $expected = "";
-        $this->setExpectedException('MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException', sprintf(Resources::INVALID_PARAM_MSG, 'array', 'array'));
 
         // Test
         $actual = $jsonSerializer->serialize($testData);

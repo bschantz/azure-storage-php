@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
+use MicrosoftAzure\Storage\Common\Internal\RestProxy;
 use MicrosoftAzure\Storage\Common\Logger;
 use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use MicrosoftAzure\Storage\Common\ServicesBuilder;
@@ -40,8 +41,8 @@ use MicrosoftAzure\Storage\Common\ServicesBuilder;
  */
 class RestProxyTestBase extends \PHPUnit\Framework\TestCase
 {
-    protected $restProxy;
-    protected $xmlSerializer;
+    protected RestProxy $restProxy;
+    protected XmlSerializer $xmlSerializer;
 
     protected function getTestName()
     {
@@ -56,28 +57,18 @@ class RestProxyTestBase extends \PHPUnit\Framework\TestCase
             Code '$code'\n";
     }
 
-    public function __construct()
+    public function setProxy($serviceRestProxy)
     {
         $this->xmlSerializer = new XmlSerializer();
         Logger::setLogFile('C:\log.txt');
-
-        // Enable PHP asserts
-        assert_options(ASSERT_ACTIVE, 1);
-        assert_options(ASSERT_WARNING, 0);
-        assert_options(ASSERT_QUIET_EVAL, 1);
-        assert_options(ASSERT_CALLBACK, 'MicrosoftAzure\Storage\Tests\Framework\RestProxyTestBase::assertHandler');
-    }
-
-    public function setProxy($serviceRestProxy)
-    {
         $this->restProxy = $serviceRestProxy;
     }
 
-    protected function onNotSuccessfulTest(\Exception $e)
+    protected function onNotSuccessfulTest(\Throwable $t): never
     {
-        parent::onNotSuccessfulTest($e);
+        parent::onNotSuccessfulTest($t);
 
         $this->tearDown();
-        throw $e;
+        throw $t;
     }
 }

@@ -48,7 +48,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
     protected $createdShares;
     protected $createdDirectories;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $fileRestProxy = FileRestProxy::createFileService($this->connectionString);
@@ -168,7 +168,7 @@ class FileServiceRestProxyTestBase extends ServiceRestProxyTestBase
         return $result;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

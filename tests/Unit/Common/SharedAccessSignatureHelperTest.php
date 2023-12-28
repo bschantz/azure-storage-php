@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common;
 
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\ServiceException;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
@@ -86,12 +87,10 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
         }
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage The string should only be a combination of
-     */
     public function testValidateAndSanitizeSignedServiceThrowsException()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("The string should only be a combination of");
         // Setup
         $sasHelper = $this->testConstruct();
         $validateAndSanitizeSignedService = self::getMethod('validateAndSanitizeSignedService', $sasHelper);
@@ -131,12 +130,10 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
         }
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage The string should only be a combination of
-     */
     public function testValidateAndSanitizeSignedResourceTypeThrowsException()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("The string should only be a combination of");
         // Setup
         $sasHelper = $this->testConstruct();
         $validateAndSanitizeSignedResourceType = self::getMethod('validateAndSanitizeSignedResourceType', $sasHelper);
@@ -170,12 +167,10 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
         }
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage is invalid
-     */
     public function testValidateAndSanitizeSignedProtocolThrowsException()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("is invalid");
         // Setup
         $sasHelper = $this->testConstruct();
         $validateAndSanitizeSignedProtocol = self::getMethod('validateAndSanitizeSignedProtocol', $sasHelper);
@@ -244,10 +239,10 @@ class SharedAccessSignatureHelperTest extends ReflectionTestBase
                         $sasHelper,
                         array($pair['sp'], $pair['sr'])
                     );
-                } catch (\InvalidArgumentException $e) {
+                } catch (InvalidArgumentException $e) {
                     $message = $e->getMessage();
                 }
-                $this->assertContains(
+                $this->assertStringContainsString(
                     $expectedErrorMessage,
                     $message
                 );

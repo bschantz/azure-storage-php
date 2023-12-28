@@ -777,7 +777,7 @@ class TableRestProxy extends ServiceRestProxy implements ITable
      *
      * @see https://docs.microsoft.com/en-us/rest/api/storageservices/query-tables
      */
-    public function queryTables($options = null)
+    public function queryTables($options = null): QueryTablesResult
     {
         return $this->queryTablesAsync($options)->wait();
     }

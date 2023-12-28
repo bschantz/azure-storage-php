@@ -25,7 +25,6 @@ namespace MicrosoftAzure\Storage\Tests\Framework;
 
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 
 /**
  * TestBase class for Storage Services test classes.
@@ -59,15 +58,10 @@ class ServiceRestProxyTestBase extends RestProxyTestBase
         return (strpos($this->connectionString, Resources::USE_DEVELOPMENT_STORAGE_NAME) !== false);
     }
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->connectionString = TestResources::getWindowsAzureStorageServicesConnectionString();
-    }
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+        $this->connectionString = TestResources::getWindowsAzureStorageServicesConnectionString();
         $this->_createDefaultProperties();
     }
 
@@ -88,7 +82,7 @@ class ServiceRestProxyTestBase extends RestProxyTestBase
         $this->propertiesChanged = true;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

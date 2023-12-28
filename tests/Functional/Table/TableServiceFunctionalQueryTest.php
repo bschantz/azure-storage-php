@@ -42,7 +42,7 @@ class TableServiceFunctionalQueryTest extends FunctionalTestBase
 
     private static $isOneTimeSetup = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         if (!self::$isOneTimeSetup) {
@@ -71,7 +71,7 @@ class TableServiceFunctionalQueryTest extends FunctionalTestBase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$isOneTimeSetup) {
             self::$isOneTimeSetup = false;

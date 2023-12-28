@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Functional\Blob;
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
@@ -45,7 +46,7 @@ class AnonymousAccessFunctionalTest extends \PHPUnit\Framework\TestCase
     private static $blobRestProxy;
     private static $accountName;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         $connectionString = TestResources::getWindowsAzureStorageServicesConnectionString();
@@ -53,14 +54,14 @@ class AnonymousAccessFunctionalTest extends \PHPUnit\Framework\TestCase
         self::$accountName = self::$blobRestProxy->getAccountName();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->containerName = TestResources::getInterestingName('con');
         self::$blobRestProxy->createContainer($this->containerName);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         self::$blobRestProxy->deleteContainer($this->containerName);
         parent::tearDown();
@@ -96,12 +97,10 @@ class AnonymousAccessFunctionalTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $result->getBlobs());
     }
 
-    /**
-     * @expectedException MicrosoftAzure\Storage\Common\Exceptions\ServiceException
-     * @expectedExceptionMessage 404
-     */
     public function testPublicAccessBlobOnly()
     {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("404");
         $acl = self::$blobRestProxy->getContainerAcl($this->containerName)->getContainerAcl();
         $acl->setPublicAccess(PublicAccessType::BLOBS_ONLY);
         self::$blobRestProxy->setContainerAcl($this->containerName, $acl);

@@ -165,10 +165,10 @@ class RetryMiddlewareFactory
             }
 
             if (!$response) {
-                if (!$exception || !($exception instanceof RequestException)) {
-                    return false;
-                } elseif ($exception instanceof ConnectException) {
+                if ($exception instanceof ConnectException) {
                     return $retryConnect;
+                } elseif (!$exception || !($exception instanceof RequestException)) {
+                    return false;
                 } else {
                     $response = $exception->getResponse();
                     if (!$response) {

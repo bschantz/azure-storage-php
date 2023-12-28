@@ -126,12 +126,10 @@ class FileRestProxyTest extends FileServiceRestProxyTestBase
         $this->assertTrue(\in_array($share3, $shareNames));
     }
 
-    /**
-     * @expectedException MicrosoftAzure\Storage\Common\Exceptions\ServiceException
-     * @expectedExceptionMessage 400
-     */
     public function testGetSetShareMetadataAndProperties()
     {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("400");
         $share1 = 'metaproperties1' . $this->createSuffix();
         $share2 = 'metaproperties2' . $this->createSuffix();
         $share3 = 'metaproperties3' . $this->createSuffix();
@@ -183,12 +181,10 @@ class FileRestProxyTest extends FileServiceRestProxyTestBase
         $this->assertEquals(0, $result->getShareUsage());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage can't be NULL.
-     */
     public function testListDirectoriesAndFilesWithNull()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("can't be NULL.");
         $this->restProxy->listDirectoriesAndFiles(null);
     }
 
@@ -751,12 +747,10 @@ class FileRestProxyTest extends FileServiceRestProxyTestBase
         $this->assertTrue($content == $expectedContent);
     }
 
-    /**
-     * @expectedException MicrosoftAzure\Storage\Common\Exceptions\ServiceException
-     * @expectedExceptionMessage There is currently no pending copy operation
-     */
     public function testAbortCopy()
     {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("There is currently no pending copy operation");
         $share = 'abortcopy' . $this->createSuffix();
         $this->createShare($share);
         $fileName = 'testfile';

@@ -31,7 +31,7 @@ class FunctionalTestBase extends IntegrationTestBase
 {
     private static $isOneTimeSetup = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $settings = StorageServiceSettings::createFromConnectionString($this->connectionString);
@@ -66,7 +66,7 @@ class FunctionalTestBase extends IntegrationTestBase
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         foreach (BlobServiceFunctionalTestData::$testContainerNames as $name) {
             $this->safeDeleteContainer($name);
@@ -74,7 +74,7 @@ class FunctionalTestBase extends IntegrationTestBase
         parent::tearDown();
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$isOneTimeSetup) {
             $tmp = new FunctionalTestBase();

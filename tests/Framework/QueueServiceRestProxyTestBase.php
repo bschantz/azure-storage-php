@@ -42,7 +42,7 @@ class QueueServiceRestProxyTestBase extends ServiceRestProxyTestBase
 {
     private $_createdQueues;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $queueRestProxy = QueueRestProxy::createQueueService($this->connectionString);
@@ -75,7 +75,7 @@ class QueueServiceRestProxyTestBase extends ServiceRestProxyTestBase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

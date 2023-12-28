@@ -259,19 +259,19 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
 
     public function testToBoolean()
     {
-        $this->assertInternalType('bool', Utilities::toBoolean('true'));
+        $this->assertIsBool(Utilities::toBoolean('true'));
         $this->assertEquals(true, Utilities::toBoolean('true'));
 
-        $this->assertInternalType('bool', Utilities::toBoolean('false'));
+        $this->assertIsBool(Utilities::toBoolean('false'));
         $this->assertEquals(false, Utilities::toBoolean('false'));
 
-        $this->assertInternalType('bool', Utilities::toBoolean(null));
+        $this->assertIsBool(Utilities::toBoolean(null));
         $this->assertEquals(false, Utilities::toBoolean(null));
 
-        $this->assertInternalType('bool', Utilities::toBoolean('true', true));
+        $this->assertIsBool(Utilities::toBoolean('true', true));
         $this->assertEquals(true, Utilities::toBoolean('true', true));
 
-        $this->assertInternalType('bool', Utilities::toBoolean('false', true));
+        $this->assertIsBool(Utilities::toBoolean('false', true));
         $this->assertEquals(false, Utilities::toBoolean('false', true));
 
         $this->assertNull(Utilities::toBoolean(null, true));
@@ -489,8 +489,8 @@ class UtilitiesTest extends \PHPUnit\Framework\TestCase
         // Assert
         $this->assertNotNull($actual1);
         $this->assertNotNull($actual2);
-        $this->assertInternalType('string', $actual1);
-        $this->assertInternalType('string', $actual2);
+        $this->assertIsString($actual1);
+        $this->assertIsString($actual2);
         $this->assertNotEquals($actual1, $actual2);
     }
 

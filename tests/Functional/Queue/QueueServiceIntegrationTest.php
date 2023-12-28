@@ -49,7 +49,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
     private static $creatableQueues;
     private static $testQueues;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // Setup container names array (list of container names used by
@@ -83,7 +83,7 @@ class QueueServiceIntegrationTest extends IntegrationTestBase
         self::createQueues(self::$testQueuesPrefix, self::$testQueues);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         self::deleteQueues(self::$testQueuesPrefix, self::$testQueues);

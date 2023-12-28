@@ -30,6 +30,8 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use InvalidArgumentException;
+use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Internal\ServiceRestProxy;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Tests\Framework\ReflectionTestBase;
@@ -205,9 +207,11 @@ class ServiceRestProxyTest extends ReflectionTestBase
      */
     public function testGenerateMetadataHeaderInvalidNameFail($proxy)
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(Resources::INVALID_META_MSG);
+
         // Setup
         $metadata = array('key1' => "value1\n", 'MyName' => "\rAzurr", 'MyCompany' => "Micr\r\nosoft_");
-        $this->setExpectedException(get_class(new \InvalidArgumentException(Resources::INVALID_META_MSG)));
 
         // Test
         $proxy->generateMetadataHeaders($metadata);
@@ -218,8 +222,8 @@ class ServiceRestProxyTest extends ReflectionTestBase
      */
     public function testOnRejectedWithException($proxy)
     {
+        $this->expectException(\Exception::class);
         // Setup
-        $this->setExpectedException(\Exception::class);
         $onRejected = self::getMethod('onRejected', $proxy);
 
         // Test
@@ -233,7 +237,8 @@ class ServiceRestProxyTest extends ReflectionTestBase
     {
         // Setup
         $message = 'test message';
-        $this->setExpectedException(\RuntimeException::class, $message);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage($message);
         $onRejected = self::getMethod('onRejected', $proxy);
 
         // Test
@@ -246,7 +251,7 @@ class ServiceRestProxyTest extends ReflectionTestBase
     public function testOnRejectedWithRequestExceptionNullResponse($proxy)
     {
         // Setup
-        $this->setExpectedException(RequestException::class);
+        $this->expectException(RequestException::class);
         $onRejected = self::getMethod('onRejected', $proxy);
 
         $request = new Request('GET', 'http://www.bing.com');
@@ -262,7 +267,7 @@ class ServiceRestProxyTest extends ReflectionTestBase
     public function testOnRejectedWithRequestExceptionUnexpectedResponse($proxy)
     {
         // Setup
-        $this->setExpectedException(\MicrosoftAzure\Storage\Common\Exceptions\ServiceException::class);
+        $this->expectException(ServiceException::class);
         $onRejected = self::getMethod('onRejected', $proxy);
 
         $request = new Request('GET', 'http://www.bing.com');

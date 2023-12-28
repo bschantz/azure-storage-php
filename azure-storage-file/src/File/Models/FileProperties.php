@@ -487,9 +487,9 @@ class FileProperties
     /**
      * Gets file copySource.
      *
-     * @return int
+     * @return string
      */
-    public function getCopySource()
+    public function getCopySource(): string
     {
         return $this->copySource;
     }
@@ -497,13 +497,13 @@ class FileProperties
     /**
      * Sets file copySource.
      *
-     * @param int $copySource value.
+     * @param string $copySource value.
      *
      * @return void
      */
     protected function setCopySource($copySource)
     {
-        Validate::isInteger($copySource, 'copySource');
+        Validate::canCastAsString($copySource, 'copySource');
         $this->copySource = $copySource;
     }
 

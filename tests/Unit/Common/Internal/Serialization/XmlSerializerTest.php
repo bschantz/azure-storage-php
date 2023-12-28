@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal\Serialization;
 
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
 use MicrosoftAzure\Storage\Common\Models\ServiceProperties;
 use MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException;
@@ -127,8 +128,7 @@ class XmlSerializerTest extends \PHPUnit\Framework\TestCase
 
     public function testObjectSerializeInvalidObject()
     {
-        // Setup
-        $this->setExpectedException(get_class(new \InvalidArgumentException()));
+        $this->expectException(InvalidArgumentException::class);
         // Test
         $actual = XmlSerializer::objectSerialize(null, null);
         // Assert

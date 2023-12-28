@@ -68,9 +68,8 @@ class CreateContainerOptions extends BlobServiceOptions
      *
      * @return void
      */
-    public function setPublicAccess($publicAccess)
+    public function setPublicAccess(string $publicAccess): void
     {
-        Validate::canCastAsString($publicAccess, 'publicAccess');
         $this->_publicAccess = $publicAccess;
     }
 

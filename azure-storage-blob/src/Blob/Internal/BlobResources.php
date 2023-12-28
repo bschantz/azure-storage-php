@@ -41,8 +41,8 @@ class BlobResources extends Resources
 {
     // @codingStandardsIgnoreStart
 
-    const BLOB_SDK_VERSION = '1.5.4';
-    const STORAGE_API_LATEST_VERSION = '2017-11-09';
+    const BLOB_SDK_VERSION = '1.6.0';
+    const STORAGE_API_LATEST_VERSION = '2023-08-03';
 
     // Error messages
     const INVALID_BTE_MSG = "The blob block type must exist in %s";

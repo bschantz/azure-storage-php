@@ -49,11 +49,9 @@ class SharedAccessSignatureAuthSchemeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(TestResources::SAS_TOKEN, $mock->getSasToken());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testConstructFromInvalidSASToken()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $mock = new SharedAccessSignatureAuthSchemeMock('?' . TestResources::SAS_TOKEN . '?foo=bar');
         $this->assertEquals(TestResources::SAS_TOKEN, $mock->getSasToken());
     }

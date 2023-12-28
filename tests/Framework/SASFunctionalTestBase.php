@@ -25,15 +25,13 @@
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
-use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
+use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\Serialization\XmlSerializer;
 use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
-use MicrosoftAzure\Storage\Common\SharedAccessSignatureHelper;
 use MicrosoftAzure\Storage\File\FileRestProxy;
 use MicrosoftAzure\Storage\Queue\QueueRestProxy;
 use MicrosoftAzure\Storage\Table\TableRestProxy;
-use MicrosoftAzure\Storage\Tests\Framework\TestResources;
-use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 
 /**
  * Test base for SAS functional tests.
@@ -59,19 +57,16 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
     protected $queueRestProxy;
     protected $fileRestProxy;
 
-    public function __construct()
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->xmlSerializer = new XmlSerializer();
         $this->connectionString = TestResources::getWindowsAzureStorageServicesConnectionString();
         $this->serviceSettings =
             StorageServiceSettings::createFromConnectionString(
                 $this->connectionString
             );
-    }
 
-    protected function setUp()
-    {
-        parent::setUp();
         $this->createdContainer = array();
         $this->createdTable     = array();
         $this->createdQueue     = array();
@@ -94,7 +89,7 @@ class SASFunctionalTestBase extends \PHPUnit\Framework\TestCase
             FileRestProxy::createFileService($connectionString);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->blobRestProxy  =
             BlobRestProxy::createBlobService($this->connectionString);

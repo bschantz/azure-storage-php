@@ -63,7 +63,7 @@ class BlobServiceIntegrationTest extends IntegrationTestBase
 
     private static $isOneTimeSetup = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         if (!self::$isOneTimeSetup) {
@@ -100,7 +100,7 @@ class BlobServiceIntegrationTest extends IntegrationTestBase
         $this->createContainers(self::$_testContainers, self::$_testContainersPrefix);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$isOneTimeSetup) {
             $inst = new IntegrationTestBase();
@@ -112,7 +112,7 @@ class BlobServiceIntegrationTest extends IntegrationTestBase
         parent::tearDownAfterClass();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // tearDown of parent will delete the container created in setUp
         // Do nothing here

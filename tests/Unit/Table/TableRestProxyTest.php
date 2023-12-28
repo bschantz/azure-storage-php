@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SlowArrayOperationsInLoopInspection */
 
 /**
  * LICENSE: The MIT License (the "License")
@@ -27,6 +27,7 @@ namespace MicrosoftAzure\Storage\Tests\Unit\Table;
 use MicrosoftAzure\Storage\Table\Internal\ITable;
 use MicrosoftAzure\Storage\Table\Internal\JsonODataReaderWriter;
 use MicrosoftAzure\Storage\Table\Internal\MimeReaderWriter;
+use MicrosoftAzure\Storage\Table\Models\QueryTablesResult;
 use MicrosoftAzure\Storage\Tests\Framework\TableServiceRestProxyTestBase;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
@@ -111,8 +112,8 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->createTable($name);
 
         // Assert
-        $result = $this->restProxy->queryTables();
-        $this->assertCount(1, $result->getTables());
+        $tables = $this->getTables();
+        $this->assertCount(1, $tables);
     }
 
     public function testGetTable()
@@ -138,8 +139,8 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->restProxy->deleteTable($name);
 
         // Assert
-        $result = $this->restProxy->queryTables();
-        $this->assertCount(0, $result->getTables());
+        $tables = $this->getTables();
+        $this->assertCount(0, $tables);
     }
 
     public function testQueryTablesSimple()
@@ -151,10 +152,9 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->createTable($name2);
 
         // Test
-        $result = $this->restProxy->queryTables();
+        $tables = $this->getTables();
 
         // Assert
-        $tables = $result->getTables();
         $this->assertCount(2, $tables);
         $this->assertEquals($name1, $tables[0]);
         $this->assertEquals($name2, $tables[1]);
@@ -166,22 +166,14 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $name1 = 'mytable1';
         $this->createTable($name1);
 
-        // Test
-        $result = $this->restProxy->queryTables();
-
-        // Assert
-        $tables = $result->getTables();
+        $tables = $this->getTables();
         $this->assertCount(1, $tables);
         $this->assertEquals($name1, $tables[0]);
     }
 
     public function testQueryTablesEmpty()
     {
-        // Test
-        $result = $this->restProxy->queryTables();
-
-        // Assert
-        $tables = $result->getTables();
+        $tables = $this->getTables();
         $this->assertCount(0, $tables);
     }
 
@@ -854,12 +846,10 @@ class TableRestProxyTest extends TableServiceRestProxyTestBase
         $this->assertTrue(true);
     }
 
-    /**
-     * @expectedException MicrosoftAzure\Storage\Common\Exceptions\ServiceException
-     * @expectedExceptionMessage All commands in a batch must operate on same entity group.
-     */
     public function testBatchWithDifferentPKFail()
     {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("All commands in a batch must operate on same entity group.");
         // Setup
         $name = 'batchwithwithdifferentpkfail';
         $this->createTable($name);

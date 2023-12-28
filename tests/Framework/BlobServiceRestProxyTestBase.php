@@ -46,7 +46,7 @@ class BlobServiceRestProxyTestBase extends ServiceRestProxyTestBase
 {
     protected $_createdContainers;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $blobRestProxy = BlobRestProxy::createBlobService($this->connectionString);
@@ -159,17 +159,18 @@ class BlobServiceRestProxyTestBase extends ServiceRestProxyTestBase
         return $result;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
-        foreach ($this->_createdContainers as $value) {
-            try {
-                $this->deleteContainer($value);
-            } catch (\Exception $e) {
-                // Ignore exception and continue, will assume that this container doesn't exist in the sotrage account
-                error_log($e->getMessage());
-            }
-        }
+        $this->deleteAllStorageContainers();
+//        foreach ($this->_createdContainers as $value) {
+//            try {
+//                $this->deleteContainer($value);
+//            } catch (\Exception $e) {
+//                // Ignore exception and continue, will assume that this container doesn't exist in the sotrage account
+//                error_log($e->getMessage());
+//            }
+//        }
     }
 }

@@ -32,7 +32,7 @@ class FunctionalTestBase extends IntegrationTestBase
 
     protected $accountName;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $settings = StorageServiceSettings::createFromConnectionString($this->connectionString);
@@ -57,7 +57,7 @@ class FunctionalTestBase extends IntegrationTestBase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$isOneTimeSetup) {
             $testBase = new FunctionalTestBase();

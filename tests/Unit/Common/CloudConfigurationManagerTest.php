@@ -42,7 +42,7 @@ class CloudConfigurationManagerTest extends \PHPUnit\Framework\TestCase
     private $_key = 'my_connection_string';
     private $_value = 'connection string value';
 
-    public function setUp()
+    public function setUp(): void
     {
         $isInitialized = new \ReflectionProperty('MicrosoftAzure\Storage\Common\CloudConfigurationManager', '_isInitialized');
         $isInitialized->setAccessible(true);

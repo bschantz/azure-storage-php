@@ -172,7 +172,7 @@ interface IBlob
      * @see http://msdn.microsoft.com/en-us/library/windowsazure/dd179468.aspx
      */
     public function createContainerAsync(
-        $container,
+        string $container,
         BlobModels\CreateContainerOptions $options = null
     );
 

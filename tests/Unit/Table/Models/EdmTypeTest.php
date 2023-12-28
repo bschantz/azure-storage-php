@@ -23,6 +23,7 @@
  */
 namespace MicrosoftAzure\Storage\Tests\Unit\Table\Models;
 
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Table\Models\EdmType;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 
@@ -134,7 +135,7 @@ class EdmTypeTest extends \PHPUnit\Framework\TestCase
     public function testUnserializeQueryValueWithInvalid()
     {
         // Assert
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         // Test
         EdmType::unserializeQueryValue('7amada', '1233');
@@ -257,7 +258,7 @@ class EdmTypeTest extends \PHPUnit\Framework\TestCase
     public function testValidateEdmValueWithInvalid()
     {
         // Assert
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         // Test
         EdmType::validateEdmValue('7amada', '1233');
@@ -350,7 +351,7 @@ class EdmTypeTest extends \PHPUnit\Framework\TestCase
     public function testSerializeValueWithInvalid()
     {
         // Assert
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         // Test
         EdmType::serializeValue('7amada', '1233');

@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Tests\Unit\Common\Internal;
 
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
 use MicrosoftAzure\Storage\Common\Exceptions\InvalidArgumentTypeException;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
@@ -50,7 +51,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
     public function testIsArrayWithNonArray()
     {
-        $this->setExpectedException(get_class(new InvalidArgumentTypeException('')));
+        $this->expectException(get_class(new InvalidArgumentTypeException('')));
         Validate::isArray(123, 'array');
     }
 
@@ -63,7 +64,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
     public function testIsStringWithNonString()
     {
-        $this->setExpectedException(get_class(new InvalidArgumentTypeException('')));
+        $this->expectException(get_class(new InvalidArgumentTypeException('')));
         Validate::canCastAsString(new \DateTime(), 'string');
     }
 
@@ -83,7 +84,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
     public function testIsIntegerWithNonInteger()
     {
-        $this->setExpectedException(get_class(new InvalidArgumentTypeException('')));
+        $this->expectException(get_class(new InvalidArgumentTypeException('')));
         Validate::isInteger(new \DateTime(), 'integer');
     }
 
@@ -96,7 +97,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
     public function testIsTrueWithFalse()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         Validate::isTrue(false, Resources::EMPTY_STRING);
     }
 
@@ -118,7 +119,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
     public function testIsDateWithNonDate()
     {
-        $this->setExpectedException(get_class(new InvalidArgumentTypeException('DateTime')));
+        $this->expectException(get_class(new InvalidArgumentTypeException('DateTime')));
         Validate::isDate('not date');
     }
 
@@ -132,13 +133,13 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
     public function testNotNullOrEmptyWithEmpty()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         Validate::notNullOrEmpty(Resources::EMPTY_STRING, 'variable');
     }
 
     public function testNotNullWithNull()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         Validate::notNullOrEmpty(null, 'variable');
     }
 
@@ -158,7 +159,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsInstanceOfStringFail()
     {
         // Setup
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $value = 'testString';
         $arrayObject = array();
 
@@ -184,7 +185,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsInstanceOfArrayFail()
     {
         // Setup
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $value = array();
         $stringObject = 'testString';
 
@@ -210,7 +211,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsInstanceOfIntFail()
     {
         // Setup
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $value = 38;
         $stringObject = 'testString';
 
@@ -249,7 +250,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsDoubleFail()
     {
         // Setup
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $value = 'testInvalidDoubleValue';
 
         // Test
@@ -264,7 +265,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $function = Validate::getIsValidHostname();
 
         // Assert
-        $this->assertInternalType('callable', $function);
+        $this->assertIsCallable($function);
     }
 
     public function testIsValidHostnamePass()
@@ -282,7 +283,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsValidHostnameNull()
     {
         // Setup
-        $this->setExpectedException(get_class(new \RuntimeException('')));
+        $this->expectException(get_class(new \RuntimeException('')));
         $value = null;
 
         // Test
@@ -294,7 +295,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsValidHostnameInvalid()
     {
         // Setup
-        $this->setExpectedException(get_class(new \RuntimeException('')));
+        $this->expectException(get_class(new \RuntimeException('')));
         $value = '.test';
 
         // Test
@@ -309,7 +310,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $function = Validate::getIsValidUri();
 
         // Assert
-        $this->assertInternalType('callable', $function);
+        $this->assertIsCallable($function);
     }
 
     public function testIsValidUriPass()
@@ -327,7 +328,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsValidUriNull()
     {
         // Setup
-        $this->setExpectedException(get_class(new \RuntimeException('')));
+        $this->expectException(get_class(new \RuntimeException('')));
         $value = null;
 
         // Test
@@ -339,7 +340,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsValidUriNotUri()
     {
         // Setup
-        $this->setExpectedException(get_class(new \RuntimeException('')));
+        $this->expectException(get_class(new \RuntimeException('')));
         $value = 'test string';
 
         // Test
@@ -363,7 +364,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsObjectNull()
     {
         // Setup
-        $this->setExpectedException(get_class(new InvalidArgumentTypeException('')));
+        $this->expectException(get_class(new InvalidArgumentTypeException('')));
         $value = null;
 
         // Test
@@ -375,7 +376,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsObjectNotObject()
     {
         // Setup
-        $this->setExpectedException(get_class(new InvalidArgumentTypeException('')));
+        $this->expectException(get_class(new InvalidArgumentTypeException('')));
         $value = 'test string';
 
         // Test
@@ -400,7 +401,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsANull()
     {
         // Setup
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $value = null;
         $type = 'MicrosoftAzure\Storage\Common\Internal\Resources';
 
@@ -413,7 +414,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsAInvalidClass()
     {
         // Setup
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $value = new Resources();
         $type = 'Some\Invalid\Class';
 
@@ -426,7 +427,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     public function testIsANotAClass()
     {
         // Setup
-        $this->setExpectedException(get_class(new InvalidArgumentTypeException('')));
+        $this->expectException(get_class(new InvalidArgumentTypeException('')));
         $value = 'test string';
         $type = 'MicrosoftAzure\Storage\Common\Internal\Resources';
 
@@ -453,7 +454,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     {
 
         // Setup
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $value = 'not a date';
 
         // Test

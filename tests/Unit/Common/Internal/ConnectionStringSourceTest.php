@@ -38,7 +38,7 @@ use MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource;
  */
 class ConnectionStringSourceTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $property = new \ReflectionProperty('MicrosoftAzure\Storage\Common\Internal\ConnectionStringSource', '_isInitialized');
         $property->setAccessible(true);

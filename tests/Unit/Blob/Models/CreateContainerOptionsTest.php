@@ -69,10 +69,11 @@ class CreateContainerOptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testSetPublicAccessInvalidValueFail()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Argument #1 ($publicAccess) must be of type string, DateTime given');
         // Setup
         $properties = new CreateContainerOptions();
         $expected = new \DateTime();
-        $this->setExpectedException(get_class(new InvalidArgumentTypeException('')));
 
         // Test
         $properties->setPublicAccess($expected);

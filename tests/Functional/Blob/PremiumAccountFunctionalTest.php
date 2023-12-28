@@ -50,7 +50,7 @@ class PremiumAccountFunctionalTest extends \PHPUnit\Framework\TestCase
     private static $accountName;
     private $containerName;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -67,7 +67,7 @@ class PremiumAccountFunctionalTest extends \PHPUnit\Framework\TestCase
         self::$blobRestProxy->createContainer($this->containerName);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (self::$blobRestProxy) {
             self::$blobRestProxy->deleteContainer($this->containerName);

@@ -50,12 +50,10 @@ class CORSTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($parsedResponse, $cors->toArray());
     }
 
-    /**
-               * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage does not exist in the given array
-     */
     public function testCreateNegative()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage("does not exist in the given array");
         $parsedResponse = array();
 
         $cors = CORS::create($parsedResponse);
