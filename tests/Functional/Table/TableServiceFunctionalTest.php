@@ -1785,6 +1785,12 @@ class TableServiceFunctionalTest extends FunctionalTestBase
         return null;
     }
 
+    /**
+     * @param string $pname
+     * @param Property $actualProp
+     * @param Property $expectedProp
+     * @return void
+     */
     public function compareProperties($pname, $actualProp, $expectedProp)
     {
         $effectiveExpectedProp = (is_null($expectedProp->getEdmType()) ? EdmType::STRING : $expectedProp->getEdmType());
@@ -1806,11 +1812,20 @@ class TableServiceFunctionalTest extends FunctionalTestBase
             $effAct = $effAct->setTimezone(new \DateTimeZone('UTC'));
         }
 
-        $this->assertEquals(
-            $expectedProp->getValue(),
-            $actualProp->getValue(),
-            'getProperties()->get(\'' . $pname . '\')->getValue [' . $effectiveExpectedProp . ']'
-        );
+        if ($expectedProp->getEdmType() == EdmType::DOUBLE) {
+            $this->assertEqualsWithDelta(
+                $expectedProp->getValue(),
+                $actualProp->getValue(),
+                0.0000001,
+                'getProperties()->get(\'' . $pname . '\')->getValue [' . $effectiveExpectedProp . ']'
+            );
+        } else {
+            $this->assertEquals(
+                $expectedProp->getValue(),
+                $actualProp->getValue(),
+                'getProperties()->get(\'' . $pname . '\')->getValue [' . $effectiveExpectedProp . ']'
+            );
+        }
     }
 
     public function testMiddlewares()

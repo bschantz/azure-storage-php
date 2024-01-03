@@ -25,6 +25,7 @@
 namespace MicrosoftAzure\Storage\Tests\Framework;
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\BlobServiceOptions;
 use MicrosoftAzure\Storage\Blob\Models\Container;
 use MicrosoftAzure\Storage\Tests\Framework\ServiceRestProxyTestBase;
 use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
@@ -45,6 +46,7 @@ use MicrosoftAzure\Storage\Common\Middlewares\RetryMiddlewareFactory;
 class BlobServiceRestProxyTestBase extends ServiceRestProxyTestBase
 {
     protected $_createdContainers;
+    protected $_createdLeases;
 
     public function setUp(): void
     {
@@ -52,7 +54,8 @@ class BlobServiceRestProxyTestBase extends ServiceRestProxyTestBase
         $blobRestProxy = BlobRestProxy::createBlobService($this->connectionString);
         $blobRestProxy->pushMiddleware(RetryMiddlewareFactory::create());
         parent::setProxy($blobRestProxy);
-        $this->_createdContainers = array();
+        $this->_createdContainers = [];
+        $this->_createdLeases = [];
     }
 
     public function createContainer($containerName, $options = null)
@@ -110,11 +113,6 @@ class BlobServiceRestProxyTestBase extends ServiceRestProxyTestBase
         }
     }
 
-    public function deleteAllStorageContainers()
-    {
-        $this->deleteContainers($this->listContainers());
-    }
-
     public function existInContainerArray($containerName, $containers)
     {
         foreach ($containers as $container) {
@@ -127,10 +125,15 @@ class BlobServiceRestProxyTestBase extends ServiceRestProxyTestBase
 
     public function deleteContainer($containerName)
     {
+        $options = new BlobServiceOptions();
         if (($key = array_search($containerName, $this->_createdContainers)) !== false) {
             unset($this->_createdContainers[$key]);
         }
-        $this->restProxy->deleteContainer($containerName);
+        if (($key = array_search($containerName, $this->_createdLeases)) !== false) {
+            $leaseId = $this->_createdLeases[$key];
+            $options->setLeaseId($leaseId);
+        }
+        $this->restProxy->deleteContainer($containerName, $options);
     }
 
     public function deleteContainers($containerList, $containerPrefix = null)
@@ -159,18 +162,23 @@ class BlobServiceRestProxyTestBase extends ServiceRestProxyTestBase
         return $result;
     }
 
+    public function acquireContainerLease(string $container): void
+    {
+        $result = $this->restProxy->acquireLease($container, '');
+        $this->_createdLeases[] = [$container => $result->getLeaseId()];
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();
 
-        $this->deleteAllStorageContainers();
-//        foreach ($this->_createdContainers as $value) {
-//            try {
-//                $this->deleteContainer($value);
-//            } catch (\Exception $e) {
-//                // Ignore exception and continue, will assume that this container doesn't exist in the sotrage account
-//                error_log($e->getMessage());
-//            }
-//        }
+        foreach ($this->_createdContainers as $container) {
+            try {
+                $this->deleteContainer($container);
+            } catch (\Exception $e) {
+                // Ignore exception and continue, will assume that this container doesn't exist in the sotrage account
+                error_log($e->getMessage());
+            }
+        }
     }
 }

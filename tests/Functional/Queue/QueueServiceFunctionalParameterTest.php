@@ -364,7 +364,7 @@ class QueueServiceFunctionalParameterTest extends FunctionalTestBase
             $this->restProxy->updateMessage($queue, $messageId, $popReceipt, $messageText, $visibilityTimeoutInSeconds, $options);
             $this->fail('Expect null visibilityTimeoutInSeconds to throw');
         } catch (\InvalidArgumentException $e) {
-            $this->assertEquals(sprintf(Resources::NULL_MSG, 'visibilityTimeoutInSeconds'), $e->getMessage(), 'Expect error message');
+            $this->assertEquals("The provided variable 'visibilityTimeoutInSeconds' should be of type 'integer'", $e->getMessage(), 'Expect error message');
         }
     }
 

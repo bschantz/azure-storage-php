@@ -74,9 +74,8 @@ class ServiceProperties
         if (array_key_exists(Resources::XTAG_CORS, $parsedResponse) &&
             $parsedResponse[Resources::XTAG_CORS] != null) {
             //There could be multiple CORS rules, so need to extract them all.
-            $corses = array();
-            $corsArray =
-                $parsedResponse[Resources::XTAG_CORS][Resources::XTAG_CORS_RULE];
+            $corses = [];
+            $corsArray = $parsedResponse[Resources::XTAG_CORS][Resources::XTAG_CORS_RULE];
             if (count(array_filter(array_keys($corsArray), 'is_string')) > 0) {
                 //single cors rule
                 $corses[] = CORS::create($corsArray);
@@ -89,7 +88,7 @@ class ServiceProperties
 
             $result->setCorses($corses);
         } else {
-            $result->setCorses(array());
+            $result->setCorses([]);
         }
 
         return $result;
@@ -168,7 +167,7 @@ class ServiceProperties
      */
     public function getCorses()
     {
-        return $this->corses;
+        return $this->corses ?? [];
     }
 
     /**

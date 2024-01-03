@@ -1517,6 +1517,8 @@ class TestResources
         $signedExpiry = "",
         $signedStart = "",
         $signedIP = "",
+        $signedSnapshotTime = "",
+        $signedEncryptionScope = "",
         $cacheControl = "",
         $contentDisposition = "",
         $contentEncoding = "",
@@ -1536,19 +1538,21 @@ class TestResources
         }
 
         $result = array();
-        $result['signedResource']     = $signedResource;
-        $result['resourceName']       = $resourceName;
-        $result['signedExpiry']       = $signedExpiry;
-        $result['signedPermissions']  = $signedPermissions;
-        $result['signedStart']        = $signedStart;
-        $result['signedIP']           = $signedIP;
-        $result['signedProtocol']     = 'https,http';
-        $result['signedIdentifier']   = '';
-        $result['cacheControl']       = $cacheControl;
-        $result['contentDisposition'] = $contentDisposition;
-        $result['contentEncoding']    = $contentEncoding;
-        $result['contentLanguage']    = $contentLanguage;
-        $result['contentType']        = $contentType;
+        $result['signedResource']        = $signedResource;
+        $result['resourceName']          = $resourceName;
+        $result['signedExpiry']          = $signedExpiry;
+        $result['signedPermissions']     = $signedPermissions;
+        $result['signedStart']           = $signedStart;
+        $result['signedIP']              = $signedIP;
+        $result['signedProtocol']        = 'https,http';
+        $result['signedIdentifier']      = '';
+        $result['signedSnapshotTime']    = $signedSnapshotTime;
+        $result['signedEncryptionScope'] = $signedEncryptionScope;
+        $result['cacheControl']          = $cacheControl;
+        $result['contentDisposition']    = $contentDisposition;
+        $result['contentEncoding']       = $contentEncoding;
+        $result['contentLanguage']       = $contentLanguage;
+        $result['contentType']           = $contentType;
 
         return $result;
     }

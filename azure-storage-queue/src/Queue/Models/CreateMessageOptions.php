@@ -24,6 +24,8 @@
 
 namespace MicrosoftAzure\Storage\Queue\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Validate;
+
 /**
  * Holds optional parameters for createMessage wrapper.
  *
@@ -36,15 +38,15 @@ namespace MicrosoftAzure\Storage\Queue\Models;
  */
 class CreateMessageOptions extends QueueServiceOptions
 {
-    private $_visibilityTimeoutInSeconds;
-    private $_timeToLiveInSeconds;
+    private ?int $_visibilityTimeoutInSeconds = null;
+    private ?int $_timeToLiveInSeconds = null;
 
     /**
      * Gets visibilityTimeoutInSeconds field.
      *
      * @return integer
      */
-    public function getVisibilityTimeoutInSeconds()
+    public function getVisibilityTimeoutInSeconds(): ?int
     {
         return $this->_visibilityTimeoutInSeconds;
     }
@@ -52,11 +54,11 @@ class CreateMessageOptions extends QueueServiceOptions
     /**
      * Sets visibilityTimeoutInSeconds field.
      *
-     * @param integer $visibilityTimeoutInSeconds value to use.
+     * @param int|null $visibilityTimeoutInSeconds value to use.
      *
      * @return void
      */
-    public function setVisibilityTimeoutInSeconds($visibilityTimeoutInSeconds)
+    public function setVisibilityTimeoutInSeconds(?int $visibilityTimeoutInSeconds)
     {
         $this->_visibilityTimeoutInSeconds = $visibilityTimeoutInSeconds;
     }
@@ -74,11 +76,11 @@ class CreateMessageOptions extends QueueServiceOptions
     /**
      * Sets timeToLiveInSeconds field.
      *
-     * @param integer $timeToLiveInSeconds value to use.
+     * @param int|null $timeToLiveInSeconds value to use.
      *
      * @return void
      */
-    public function setTimeToLiveInSeconds($timeToLiveInSeconds)
+    public function setTimeToLiveInSeconds(?int $timeToLiveInSeconds)
     {
         $this->_timeToLiveInSeconds = $timeToLiveInSeconds;
     }

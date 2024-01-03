@@ -69,9 +69,9 @@ class QueueServiceFunctionalOptionsTest extends \PHPUnit\Framework\TestCase
         $l = new Logging();
         $this->assertNull($l->getRetentionPolicy(), 'Default Logging->getRetentionPolicy should be null');
         $this->assertNull($l->getVersion(), 'Default Logging->getVersion should be null');
-        $this->assertNull($l->getDelete(), 'Default Logging->getDelete should be null');
-        $this->assertNull($l->getRead(), 'Default Logging->getRead should be false');
-        $this->assertNull($l->getWrite(), 'Default Logging->getWrite should be false');
+        $this->assertFalse($l->getDelete(), 'Default Logging->getDelete should be null');
+        $this->assertFalse($l->getRead(), 'Default Logging->getRead should be false');
+        $this->assertFalse($l->getWrite(), 'Default Logging->getWrite should be false');
         $l->setRetentionPolicy($rp);
         $l->setVersion('2.0');
         $l->setDelete(true);
@@ -145,7 +145,7 @@ class QueueServiceFunctionalOptionsTest extends \PHPUnit\Framework\TestCase
     {
         $options = new CreateQueueOptions();
         $this->assertNull($options->getMetadata(), 'Default CreateQueueOptions->getMetadata');
-        $this->assertEquals(0, count($options->getMetadata()), 'Default CreateQueueOptions->getMetadata->size');
+        $this->assertEquals(0, count($options->getMetadata() ?? []), 'Default CreateQueueOptions->getMetadata->size');
         $this->assertNull($options->getTimeout(), 'Default CreateQueueOptions->getTimeout');
         $metadata = array(
             'foo' => 'bar',

@@ -1110,7 +1110,7 @@ class BlobServiceFunctionalTestData
         $errorMsg = 'The append position condition specified was not met.';
         $ret[] = ['size' => $size, 'options' => $options, 'error' => $errorMsg];
 
-        $size = Resources::MB_IN_BYTES_1 + Resources::MB_IN_BYTES_4;
+        $size = Resources::MB_IN_BYTES_1 + Resources::MB_IN_BYTES_100;
         $options = new AppendBlockOptions();
         $errorMsg = 'The request body is too large and exceeds the maximum permissible limit.';
         $ret[] = ['size' => $size, 'options' => $options, 'error' => $errorMsg];

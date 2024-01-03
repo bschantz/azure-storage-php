@@ -36,7 +36,7 @@ namespace MicrosoftAzure\Storage\Blob\Models;
  */
 class CreateBlobSnapshotOptions extends BlobServiceOptions
 {
-    private $_metadata;
+    private $_metadata = [];
 
     /**
      * Gets metadata.

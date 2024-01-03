@@ -24,6 +24,9 @@
 
 namespace MicrosoftAzure\Storage\Table\Models;
 
+use MicrosoftAzure\Storage\Common\Internal\Validate;
+use MicrosoftAzure\Storage\Table\Models\Filters\Filter;
+
 /**
  * Query to be performed on a table
  *
@@ -36,14 +39,20 @@ namespace MicrosoftAzure\Storage\Table\Models;
  */
 class Query
 {
-    private $_selectFields;
-    private $_filter;
-    private $_top;
+    private array $_selectFields = [];
+    private ?Filter $_filter = null;
+    private ?int $_top = null;
+
+    public function __construct() {
+        $this->_selectFields = [];
+        $this->_filter = null;
+        $this->_top = null;
+    }
 
     /**
      * Gets filter.
      *
-     * @return Filters\Filter
+     * @return Filter
      */
     public function getFilter()
     {
@@ -53,11 +62,11 @@ class Query
     /**
      * Sets filter.
      *
-     * @param Filters\Filter $filter value.
+     * @param Filter $filter value.
      *
      * @return void
      */
-    public function setFilter($filter)
+    public function setFilter(Filter $filter)
     {
         $this->_filter = $filter;
     }
@@ -101,7 +110,7 @@ class Query
      *
      * @return array
      */
-    public function getSelectFields()
+    public function getSelectFields(): array
     {
         return $this->_selectFields;
     }
@@ -113,7 +122,7 @@ class Query
      *
      * @return void
      */
-    public function setSelectFields(array $selectFields = null)
+    public function setSelectFields(array $selectFields)
     {
         $this->_selectFields = $selectFields;
     }

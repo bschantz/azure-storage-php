@@ -24,9 +24,12 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\Blob;
 
+use MicrosoftAzure\Storage\Blob\BlobSharedAccessSignatureHelper;
 use MicrosoftAzure\Storage\Tests\Framework\SASFunctionalTestBase;
 use MicrosoftAzure\Storage\Common\Internal\Resources;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
+
+use function random_bytes;
 
 /**
  * Tests for service SAS proxy tests.
@@ -87,7 +90,7 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
             $result = $proxy->listBlobs($container);
             $this->assertEquals($blob0, $result->getBlobs()[0]->getName());
             //a
-            $content = \openssl_random_pseudo_bytes(1024);
+            $content = random_bytes(1024);
             $proxy->appendBlock($container, $blob0, $content);
             //w
             $blob1 = TestResources::getInterestingName('blob');
@@ -105,7 +108,7 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
             $proxy->deleteBlob($container, $blob0);
             $proxy->deleteBlob($container, $blob1);
             $result = $proxy->listBlobs($container);
-            $this->assertEquals(0, \count($result->getBlobs()));
+            $this->assertCount(0, $result->getBlobs());
         }
         //Validate that a cross access with wrong proxy/container pair
         //would not be successful
@@ -175,7 +178,7 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
                 $blobProxy->listBlobs($container);
             }
         );
-        $content = \openssl_random_pseudo_bytes(20);
+        $content = random_bytes(20);
         //rcwd can be performed.
         $blobProxy->createBlockBlob($container, $blob, $content);
         $actual = stream_get_contents($blobProxy->getBlob($container, $blob)->getContentStream());
@@ -327,7 +330,7 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
         $blobProxy->deleteBlob($container, $blob);
     }
 
-    private function createProxyWithBlobSASfromArray($helper, $testCase)
+    private function createProxyWithBlobSASfromArray(BlobSharedAccessSignatureHelper $helper, $testCase)
     {
         $sas = $helper->generateBlobServiceSharedAccessSignatureToken(
             $testCase['signedResource'],
@@ -338,6 +341,8 @@ class BlobServiceSASFunctionalTest extends SASFunctionalTestBase
             $testCase['signedIP'],
             $testCase['signedProtocol'],
             $testCase['signedIdentifier'],
+            $testCase['signedSnapshopTime'],
+            $testCase['signedEncryptionScope'],
             $testCase['cacheControl'],
             $testCase['contentDisposition'],
             $testCase['contentEncoding'],

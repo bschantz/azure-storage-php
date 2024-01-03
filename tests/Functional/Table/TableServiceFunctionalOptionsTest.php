@@ -69,9 +69,9 @@ class TableServiceFunctionalOptionsTest extends \PHPUnit\Framework\TestCase
         $l = new Logging();
         $this->assertNull($l->getRetentionPolicy(), 'Default Logging->getRetentionPolicy should be null');
         $this->assertNull($l->getVersion(), 'Default Logging->getVersion should be null');
-        $this->assertNull($l->getDelete(), 'Default Logging->getDelete should be null');
-        $this->assertNull($l->getRead(), 'Default Logging->getRead should be false');
-        $this->assertNull($l->getWrite(), 'Default Logging->getWrite should be false');
+        $this->assertFalse($l->getDelete(), 'Default Logging->getDelete should be false');
+        $this->assertFalse($l->getRead(), 'Default Logging->getRead should be false');
+        $this->assertFalse($l->getWrite(), 'Default Logging->getWrite should be false');
         $l->setRetentionPolicy($rp);
         $l->setVersion('2.0');
         $l->setDelete(true);
@@ -178,8 +178,8 @@ class TableServiceFunctionalOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($filter, $options->getFilter(), 'Set $options->getFilter');
         $this->assertEquals($filter, $options->getQuery()->getFilter(), 'Set $options->getQuery->getFilter');
-        $this->assertNull($options->getSelectFields(), 'Set $options->getSelectFields');
-        $this->assertNull($options->getQuery()->getSelectFields(), 'Set $options->getQuery->getSelectFields');
+        $this->assertEmpty($options->getSelectFields(), 'Set $options->getSelectFields');
+        $this->assertEmpty($options->getQuery()->getSelectFields(), 'Set $options->getQuery->getSelectFields');
         $this->assertEquals(TableServiceFunctionalTestData::INT_MAX_VALUE, $options->getTop(), 'Set $options->getTop');
         $this->assertEquals(TableServiceFunctionalTestData::INT_MAX_VALUE, $options->getQuery()->getTop(), 'Set $options->getQuery->getTop');
     }
@@ -188,7 +188,7 @@ class TableServiceFunctionalOptionsTest extends \PHPUnit\Framework\TestCase
     {
         $query = new Query();
         $this->assertNull($query->getFilter(), 'Default Query->getFilter');
-        $this->assertNull($query->getSelectFields(), 'Default Query->getSelectFields');
+        $this->assertEmpty($query->getSelectFields(), 'Default Query->getSelectFields');
         $this->assertNull($query->getTop(), 'Default Query->getTop');
 
         $query->addSelectField('bar');
@@ -198,11 +198,11 @@ class TableServiceFunctionalOptionsTest extends \PHPUnit\Framework\TestCase
 
         $filter = Filter::applyConstant('foo', EdmType::STRING);
         $query->setFilter($filter);
-        $query->setSelectFields(null);
+        $query->setSelectFields([]);
         $query->setTop(TableServiceFunctionalTestData::INT_MAX_VALUE);
 
         $this->assertEquals($filter, $query->getFilter(), 'Set Query->getFilter');
-        $this->assertNull($query->getSelectFields(), 'Set Query->getSelectFields');
+        $this->assertEmpty($query->getSelectFields(), 'Set Query->getSelectFields');
         $this->assertEquals(TableServiceFunctionalTestData::INT_MAX_VALUE, $query->getTop(), 'Set Query->getTop');
     }
 

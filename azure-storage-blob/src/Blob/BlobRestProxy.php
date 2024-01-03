@@ -1524,7 +1524,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
         $this->addOptionalQueryParam(
             $queryParams,
             Resources::QP_PREFIX_LOWERCASE,
-            str_replace('\\', '/', $options->getPrefix())
+            str_replace('\\', '/', $options->getPrefix() ?? '')
         );
         $this->addOptionalQueryParam(
             $queryParams,

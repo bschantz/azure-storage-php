@@ -608,11 +608,11 @@ class TableServiceFunctionalQueryTest extends FunctionalTestBase
         }
     }
 
-    private function verifyqueryEntitiesWorker($ret, $options)
+    private function verifyqueryEntitiesWorker($ret, QueryEntitiesOptions $options)
     {
         $this->assertNotNull($ret->getEntities(), 'getTables');
 
-        $expectedData = array();
+        $expectedData = [];
         foreach (self::$entitiesInTable as $e) {
             array_push($expectedData, $e);
         }
@@ -622,7 +622,7 @@ class TableServiceFunctionalQueryTest extends FunctionalTestBase
         $projected = false;
 
         if (!is_null($options->getNextPartitionKey()) && !is_null($options->getNextRowKey())) {
-            $expectedDataTmp = array();
+            $expectedDataTmp = [];
             foreach ($expectedData as $e) {
                 if (($e->getPartitionKey() >  $options->getNextPartitionKey()) ||
                     (($e->getPartitionKey() == $options->getNextPartitionKey()) &&
@@ -635,7 +635,7 @@ class TableServiceFunctionalQueryTest extends FunctionalTestBase
 
         $q = $options->getQuery();
         $expectedFilter = $q->getFilter();
-        $projected = (count($q->getSelectFields()) != 0);
+        $projected = (count($q->getSelectFields()) !== 0);
 
         $expectedData = TableServiceFunctionalTestUtils::filterEntityList($expectedFilter, $expectedData);
 

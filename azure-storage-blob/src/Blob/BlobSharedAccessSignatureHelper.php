@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Blob;
 
+use InvalidArgumentException;
 use MicrosoftAzure\Storage\Blob\Internal\BlobResources as Resources;
 use MicrosoftAzure\Storage\Common\Internal\Utilities;
 use MicrosoftAzure\Storage\Common\Internal\Validate;
@@ -93,6 +94,8 @@ class BlobSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         $signedIP = "",
         $signedProtocol = "",
         $signedIdentifier = "",
+        $signedSnapshotTime = "",
+        $signedEncryptionScope = "",
         $cacheControl = "",
         $contentDisposition = "",
         $contentEncoding = "",
@@ -104,12 +107,13 @@ class BlobSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         Validate::canCastAsString($signedResource, 'signedResource');
         Validate::notNullOrEmpty($signedResource, 'signedResource');
         Validate::isTrue(
-            $signedResource == Resources::RESOURCE_TYPE_BLOB ||
-            $signedResource == Resources::RESOURCE_TYPE_CONTAINER,
+            $signedResource === Resources::RESOURCE_TYPE_BLOB ||
+            $signedResource === Resources::RESOURCE_TYPE_CONTAINER ||
+            $signedResource === Resources::RESOURCE_TYPE_DIRECTORY,
             \sprintf(
                 Resources::INVALID_VALUE_MSG,
                 '$signedResource',
-                'Can only be \'b\' or \'c\'.'
+                'Can only be \'b\', \'c\', or \'d\'.'
             )
         );
 
@@ -159,55 +163,77 @@ class BlobSharedAccessSignatureHelper extends SharedAccessSignatureHelper
         Validate::canCastAsString($contentLanguage, 'contentLanguage');
         Validate::canCastAsString($contentType, 'contentType');
 
+        // construct an array for the values to be in the token query string
+        $sasParams = [];
+        $sasParams['sp'] = $signedPermissions;
+        $sasParams['sv'] = Resources::STORAGE_API_LATEST_VERSION;
+        $sasParams['st'] = $signedStart;
+        $sasParams['se'] = $signedExpiry;
+        $sasParams['sr'] = $signedResource;
+        if (!empty($signedIdentifier)) {
+            $sasParams['si'] = $signedIdentifier;
+        }
+        if (!empty($signedIP)) {
+            $sasParams['sip'] = $signedIP;
+        }
+        if (!empty($signedProtocol)) {
+            $sasParams['spr'] = $signedProtocol;
+        }
+        if (!empty($signedSnapshotTime)) {
+            $sasParams['sst'] = $signedSnapshotTime;
+        }
+        if (!empty($signedEncryptionScope)) {
+            $sasParams['ses'] = $signedEncryptionScope;
+        }
+        if (!empty($cacheControl)) {
+            $sasParams['rscc'] = $cacheControl;
+        }
+        if (!empty($contentDisposition)) {
+            $sasParams['rscd'] = $contentDisposition;
+        }
+        if (!empty($contentEncoding)) {
+            $sasParams['rsce'] = $contentEncoding;
+        }
+        if (!empty($contentLanguage)) {
+            $sasParams['rdcl'] = $contentLanguage;
+        }
+        if (!empty($contentType)) {
+            $sasParams['rdct'] = $contentType;
+        }
+
         // construct an array with the parameters to generate the shared access signature at the account level
-        $parameters = array();
-        $parameters[] = $signedPermissions;
-        $parameters[] = $signedStart;
-        $parameters[] = $signedExpiry;
-        $parameters[] = static::generateCanonicalResource(
+        $arrayToSign = [];
+        $arrayToSign[] = $sasParams['sp'];
+        $arrayToSign[] = $sasParams['st'];
+        $arrayToSign[] = $sasParams['se'];
+        $arrayToSign[] = static::generateCanonicalResource(
             $this->accountName,
             Resources::RESOURCE_TYPE_BLOB,
             $resourceName
         );
-        $parameters[] = $signedIdentifier;
-        $parameters[] = $signedIP;
-        $parameters[] = $signedProtocol;
-        $parameters[] = Resources::STORAGE_API_LATEST_VERSION;
-        $parameters[] = $cacheControl;
-        $parameters[] = $contentDisposition;
-        $parameters[] = $contentEncoding;
-        $parameters[] = $contentLanguage;
-        $parameters[] = $contentType;
+        $arrayToSign[] = $sasParams['si'];
+        $arrayToSign[] = $sasParams['sip'];
+        $arrayToSign[] = $sasParams['spr'];
+        $arrayToSign[] = $sasParams['sv'];
+        $arrayToSign[] = $sasParams['sr'];
+        $arrayToSign[] = $sasParams['sst'];
+        $arrayToSign[] = $sasParams['ses'];
+        $arrayToSign[] = $sasParams['rscc'];
+        $arrayToSign[] = $sasParams['rscd'];
+        $arrayToSign[] = $sasParams['rsce'];
+        $arrayToSign[] = $sasParams['rdcl'];
+        $arrayToSign[] = $sasParams['rdct'];
 
         // implode the parameters into a string
-        $stringToSign = implode("\n", $parameters);
+        $stringToSign = implode("\n", $arrayToSign);
+
         // decode the account key from base64
         $decodedAccountKey = base64_decode($this->accountKey);
         // create the signature with hmac sha256
         $signature = hash_hmac("sha256", $stringToSign, $decodedAccountKey, true);
         // encode the signature as base64
-        $sig = urlencode(base64_encode($signature));
+        $sasParams['sig'] = base64_encode($signature);
 
-        $buildOptQueryStr = function ($string, $abrv) {
-            return $string === '' ? '' : $abrv . $string;
-        };
-        //adding all the components for account SAS together.
-        $sas = 'sv=' . Resources::STORAGE_API_LATEST_VERSION;
-        $sas .= '&sr=' . $signedResource;
-        $sas .= $buildOptQueryStr($cacheControl, '&rscc=');
-        $sas .= $buildOptQueryStr($contentDisposition, '&rscd=');
-        $sas .= $buildOptQueryStr($contentEncoding, '&rsce=');
-        $sas .= $buildOptQueryStr($contentLanguage, '&rscl=');
-        $sas .= $buildOptQueryStr($contentType, '&rsct=');
-
-        $sas .= $buildOptQueryStr($signedStart, '&st=');
-        $sas .= '&se=' . $signedExpiry;
-        $sas .= '&sp=' . $signedPermissions;
-        $sas .= $buildOptQueryStr($signedIP, '&sip=');
-        $sas .= $buildOptQueryStr($signedProtocol, '&spr=');
-        $sas .= $buildOptQueryStr($signedIdentifier, '&si=');
-        $sas .= '&sig=' . $sig;
-
-        return $sas;
+        return http_build_query($sasParams);
     }
 }

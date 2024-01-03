@@ -405,6 +405,7 @@ class Resources
     // Resource Types
     const RESOURCE_TYPE_BLOB      = 'b';
     const RESOURCE_TYPE_CONTAINER = 'c';
+    const RESOURCE_TYPE_DIRECTORY = 'd';
     const RESOURCE_TYPE_QUEUE     = 'q';
     const RESOURCE_TYPE_TABLE     = 't';
     const RESOURCE_TYPE_SHARE     = 's';

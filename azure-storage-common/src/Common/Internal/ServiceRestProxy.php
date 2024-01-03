@@ -71,22 +71,25 @@ class ServiceRestProxy extends RestProxy
      *                                                  the service
      */
     public function __construct(
-        $primaryUri,
-        $secondaryUri,
-        $accountName,
+        string $primaryUri,
+        ?string $secondaryUri,
+        ?string $accountName,
         array $options = []
     ) {
         $primaryUri   = Utilities::appendDelimiter($primaryUri, '/');
-        $secondaryUri = Utilities::appendDelimiter($secondaryUri, '/');
 
         $dataSerializer = new XmlSerializer();
         parent::__construct($dataSerializer);
 
         $this->accountName     = $accountName;
         $this->psrPrimaryUri   = new Uri($primaryUri);
-        $this->psrSecondaryUri = new Uri($secondaryUri);
         $this->options         = array_merge(array('http' => array()), $options);
         $this->client          = self::createClient($this->options['http']);
+
+        if ($secondaryUri) {
+            $secondaryUri = Utilities::appendDelimiter($secondaryUri, '/');
+            $this->psrSecondaryUri = new Uri($secondaryUri);
+        }
     }
 
     /**

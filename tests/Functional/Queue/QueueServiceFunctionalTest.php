@@ -735,6 +735,8 @@ class QueueServiceFunctionalTest extends FunctionalTestBase
             } else {
                 throw $e;
             }
+        } catch (\InvalidArgumentException $e) {
+            $this->assertEquals('"x-ms-meta-<>000" is not valid header name.', $e->getMessage());
         }
         // Clean up.
         $this->restProxy->deleteQueue($queue);
@@ -807,7 +809,7 @@ class QueueServiceFunctionalTest extends FunctionalTestBase
                 $options->setTimeout($timeout);
 
                 $options->setTimeToLiveInSeconds($timeToLiveInSeconds);
-                $options->setVisibilityTimeoutInSeconds($visibilityTimeoutInSeconds . '');
+                $options->setVisibilityTimeoutInSeconds($visibilityTimeoutInSeconds);
                 $this->createMessageWorker(QueueServiceFunctionalTestData::getSimpleMessageText(), $options);
             }
         }
@@ -818,7 +820,7 @@ class QueueServiceFunctionalTest extends FunctionalTestBase
             $options = new CreateMessageOptions();
             $options->setTimeout($timeout);
 
-            $options->setTimeToLiveInSeconds($timeToLiveInSeconds . '');
+            $options->setTimeToLiveInSeconds($timeToLiveInSeconds);
             $options->setVisibilityTimeoutInSeconds($visibilityTimeoutInSeconds);
             $this->createMessageWorker(QueueServiceFunctionalTestData::getSimpleMessageText(), $options);
         }

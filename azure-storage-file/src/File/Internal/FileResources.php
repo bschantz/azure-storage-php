@@ -41,8 +41,8 @@ class FileResources extends Resources
 {
     // @codingStandardsIgnoreStart
 
-    const FILE_SDK_VERSION = '1.2.5';
-    const STORAGE_API_LATEST_VERSION = '2016-05-31';
+    const FILE_SDK_VERSION = '1.3.0';
+    const STORAGE_API_LATEST_VERSION = '2023-08-03';
 
     // Error messages
     const FILE_LOCATION_IS_PRIMARY_ONLY = "Can only specify PRIMARY_ONLY for file service's location mode.";

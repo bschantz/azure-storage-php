@@ -24,6 +24,7 @@
 
 namespace MicrosoftAzure\Storage\Tests\Functional\Blob;
 
+use MicrosoftAzure\Storage\Blob\Models\CreateBlobPagesOptions;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 use MicrosoftAzure\Storage\Blob\Models\CreatePageBlobOptions;
 use MicrosoftAzure\Storage\Tests\Framework\TestResources;
@@ -115,7 +116,7 @@ class BlobServiceIntegrationTest extends IntegrationTestBase
     protected function tearDown(): void
     {
         // tearDown of parent will delete the container created in setUp
-        // Do nothing here
+        parent::tearDown();
     }
 
     public function testGetServicePropertiesWorks()
@@ -750,7 +751,9 @@ class BlobServiceIntegrationTest extends IntegrationTestBase
         $content = str_pad('', 512);
         $this->restProxy->createPageBlob($container, $blob, 512);
 
-        $result = $this->restProxy->createBlobPages($container, $blob, new Range(0, 511), $content);
+        $options = new CreateBlobPagesOptions();
+        $options->setContentMD5(base64_encode(md5($content, true)));
+        $result = $this->restProxy->createBlobPages($container, $blob, new Range(0, 511), $content, $options);
 
         // Assert
         $this->assertNotNull($result, '$result');

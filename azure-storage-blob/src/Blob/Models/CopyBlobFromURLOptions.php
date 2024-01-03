@@ -38,10 +38,10 @@ class CopyBlobFromURLOptions extends BlobServiceOptions
 {
     use AccessTierTrait;
 
-    private $sourceLeaseId;
-    private $sourceAccessConditions;
-    private $metadata;
-    private $isIncrementalCopy;
+    private ?string $sourceLeaseId = null;
+    private array $sourceAccessConditions = [];
+    private array $metadata = [];
+    private bool $isIncrementalCopy = false;
 
     /**
      * Gets source access condition

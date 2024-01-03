@@ -158,12 +158,12 @@ class QueryEntitiesOptions extends TableServiceOptions
      * You can either use this individual function or use setQuery to set the whole
      * query object.
      *
-     * @param array $selectFields value.
+     * @param null|array $selectFields value.
      *
      * @return void
      */
-    public function setSelectFields(array $selectFields = null)
+    public function setSelectFields(?array $selectFields = null)
     {
-        $this->query->setSelectFields($selectFields);
+        $this->query->setSelectFields($selectFields ?? []);
     }
 }

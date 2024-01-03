@@ -601,14 +601,14 @@ class Utilities
      *
      * @return boolean
      */
-    public static function endsWith($haystack, $needle, $ignoreCase = false)
+    public static function endsWith(string $haystack, string $needle, bool $ignoreCase = false): bool
     {
         if ($ignoreCase) {
             $haystack = strtolower($haystack);
             $needle   = strtolower($needle);
         }
         $length = strlen($needle);
-        if ($length == 0) {
+        if ($length === 0) {
             return true;
         }
 
